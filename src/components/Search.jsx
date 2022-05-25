@@ -3,7 +3,17 @@ import axios from 'axios';
 
 const Search = () => {
   const [searchValue, setSearchValue] = useState('react');
+  const [substitude, setSubstitude] = useState(searchValue);
   const [results, setResults] = useState([]);
+
+  useEffect(() => {
+    const timerId = setTimeout(() => {
+      setSubstitude(searchValue);
+    }, 1000);
+    return () => {
+      clearTimeout(timerId);
+    };
+  }, [searchValue]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -16,25 +26,14 @@ const Search = () => {
           action: 'query',
           list: 'search',
           origin: '*',
-          srsearch: searchValue,
+          srsearch: substitude,
           format: 'json',
         },
       });
       setResults(search);
     };
-
-    if (searchValue && !results.length) {
-      fetchData();
-    } else {
-      const timeoutId = setTimeout(() => {
-        if (searchValue) fetchData();
-      }, 1000);
-
-      return () => {
-        clearTimeout(timeoutId);
-      };
-    }
-  }, [searchValue]);
+    fetchData();
+  }, [substitude]);
 
   const renderResults = results.map((result, index) => {
     return (
