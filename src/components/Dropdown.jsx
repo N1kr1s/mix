@@ -56,7 +56,7 @@ const Dropdown = ({ options, selected, handleSetSelected, label }) => {
           color: `${selected.value}`,
         }}
       >
-        {selected.value}
+        {selected.value.length > 2 ? selected.value : null}
       </div>
     </>
   );
